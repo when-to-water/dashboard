@@ -7,6 +7,7 @@
     <title>when-to-water</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -49,7 +50,15 @@
                             </div>
                         </div>
                     </form>
-                    <button type="button" class="btn btn-primary my-3">Refresh</button>
+                    <button type="button" class="btn btn-primary mt-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-arrow-down-up" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5zm-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5z">
+                            </path>
+                        </svg>
+                        Refresh
+                    </button>
                 </div>
                 <hr class="col-lg-6 mx-auto my-5">
                 <div class="col-lg-6 mx-auto">
@@ -139,7 +148,8 @@
                     <canvas id="plantChart" height="415px"></canvas>
                 </div>
             </div>
-            <div class="blockquote-footer text-end"><a href="https://www.flaticon.com/free-icons/plant" title="plant icons">Plant icons created by Freepik - Flaticon</a></div>
+            <div class="blockquote-footer text-end"><a href="https://www.flaticon.com/free-icons/plant"
+                    title="plant icons">Plant icons created by Freepik - Flaticon</a></div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
@@ -236,7 +246,7 @@
                     index++
                 });
 
-                
+
                 const labels = last7Days();
                 const data = {
                     labels: labels,
@@ -287,7 +297,7 @@
                         },
                     }
                 })
-            
+
 
             });
 
