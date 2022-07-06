@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>when-to-water</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+
+<body>
+    <main>
+        <div class="px-4 py-5 my-5 text-center">
+            <img class="d-block mx-auto mb-4" src="https://avatars.githubusercontent.com/u/104163465?s=200&v=4" alt=""
+                width="100" height="100">
+            <h1 class="display-5 fw-bold">when-to-water</h1>
+            <div class="col-lg-6 mx-auto">
+                <p class="lead mb-4">An application to tell you when to water your plants. Created for the course
+                    <strong>Anwendungsprojekt</strong> at the <a href="https://www.fom.de/" rel="nofollow">FOM
+                        Hochschule</a> by <a href="https://github.com/BeneKenobi">@BeneKenobi</a>, <a
+                        href="https://github.com/Mekcyed">@Mekcyed</a> and <a
+                        href="https://github.com/Sharakh69">@Sharakh69</a>.
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="row g-1 py-5 row-cols-1 row-cols-lg-3">
+                <div class="feature col" id="plant_1_details">
+                    <h3 class="display-7 fw-bold">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </h3>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" id="plant_1_watering">
+                            <div class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </li>
+                        <li class="list-group-item" id="plant_1_last_measurement">
+                            <div class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </li>
+                        <li class="list-group-item" id="plant_1_predicted_moisture">
+                            <div class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="feature col" id="plant_2_details">
+                    <h3 class="display-7 fw-bold">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </h3>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" id="plant_2_watering">
+                            <div class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </li>
+                        <li class="list-group-item" id="plant_2_last_measurement">
+                            <div class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </li>
+                        <li class="list-group-item" id="plant_2_predicted_moisture">
+                            <div class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="feature col" id="plant_3_details">
+                    <h3 class="display-7 fw-bold">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </h3>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" id="plant_3_watering">
+                            <div class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </li>
+                        <li class="list-group-item" id="plant_3_last_measurement">
+                            <div class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </li>
+                        <li class="list-group-item" id="plant_3_predicted_moisture">
+                            <div class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 mx-auto text-center">
+            <h2 class="display-7 fw-bold">Last week moisture</h2>
+            <canvas id="plantChart"></canvas>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"
+            integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/luxon@2.4.0/build/global/luxon.min.js"
+            integrity="sha256-DIsAGD2EF8Qq2PCH9yzX/yt9FliJfWf+aGcdgR6tKwo=" crossorigin="anonymous"></script>
+        <script>
+            var DateTime = luxon.DateTime;
+            const NOW = DateTime.now()
+            const COLORS = [
+                "#E69F00",
+                "#56B4E9",
+                "#009E73",
+                "#F0E442",
+                "#0072B2",
+                "#D55E00",
+                "#CC79A7",
+            ]
+
+            function last7Days() {
+                var result = [];
+                for (var i = 1; i < 8; i++) {
+                    result.push(NOW.minus({ days: i }).toISODate())
+                }
+
+                return (result.reverse());
+            }
+
+            $(function () {
+
+
+
+                // url = "https://awdoshiafdfteasrlnsp2cwwte0qphrd.lambda-url.eu-central-1.on.aws/";
+                // data = { "Pilea": 20 };
+                // $.ajax(url, {
+                //     data: JSON.stringify(data),
+                //     contentType: 'application/json',
+                //     type: 'POST'
+                // }).done(function (data) {
+                //     console.log(data);
+                // }).fail(function (data) {
+                //     console.error(data);
+                // });;
+                resultData = JSON.parse('{"Pilea": {"last_measuring": {"time": 1657040400, "value": 68.3}, "predicted_moisture": 65.17810837651099, "next_watering": 12.317696086879955, "last_week_moistures": [53.804329268292676, 53.13958333333333, 53.55625, 72.37083333333334, 71.93958333333333, 70.50208333333333, 69.3111111111111]}, "Drachenbaum": {"last_measuring": {"time": 1657036800, "value": 62.4}, "predicted_moisture": 61.84554479135728, "next_watering": 67.38412529378067, "last_week_moistures": [62.83942424242424, 62.07708333333333, 61.206250000000004, 59.387499999999996, 57.574999999999996, 56.34791666666666, 58.32647058823529]}, "Goldfruchtpalme": {"last_measuring": {"time": 1657040400, "value": 58.4}, "predicted_moisture": 56.811211671440056, "next_watering": 19.721199998940456, "last_week_moistures": [69.2325, 68.02291666666666, 66.87916666666666, 64.79583333333333, 62.50625, 60.552083333333336, 58.65833333333333]}}');
+
+                let index = 1;
+                Object.keys(resultData).forEach(key => {
+                    $(`#plant_${index}_details h3`).html(key);
+
+                    let watering = Math.round(resultData[key].next_watering);
+                    let level = "";
+                    if (watering < 0) {
+                        watering = `${Math.abs(watering)} day(s) ago`
+                        level = "danger"
+                    } else if (watering < 1) {
+                        watering = 'today'
+                        level = "warning"
+                    } else {
+                        watering = `in ${watering} day(s)`
+                        level = "success"
+                    }
+                    $(`#plant_${index}_watering`).html(`Next watering: ${watering}`).addClass(`list-group-item-${level}`);
+
+                    last_measurement_diff = DateTime.fromSeconds(resultData[key].last_measuring.time).toRelative({locale: "en"})
+                    $(`#plant_${index}_last_measurement`).html(`Last measured soil moisture: ${resultData[key].last_measuring.value} % <span class="badge text-bg-secondary">${last_measurement_diff}</span>`);
+
+                    $(`#plant_${index}_predicted_moisture`).html(`Current soil moisture: ${resultData[key].predicted_moisture.toFixed(1)} % <span class="badge text-bg-primary">predicted</span>`);
+
+                    index++
+                });
+
+                // graph
+                let datasets = [];
+
+                index = 0;
+                Object.keys(resultData).forEach(key => {
+                    let data = resultData[key].last_week_moistures
+                    datasets.push(
+                        {
+                            label: key,
+                            borderColor: COLORS[index],
+                            backgroundColor: COLORS[index],
+                            fill: false,
+                            cubicInterpolationMode: 'monotone',
+                            data: data,
+                            tension: 0.1
+                        }
+                    )
+                    index++
+                });
+
+                const labels = last7Days();
+                const data = {
+                    labels: labels,
+                    datasets: datasets
+                };
+                let delayed;
+
+                const ctx = document.getElementById('plantChart').getContext('2d');
+                const plantChart = new Chart(ctx, {
+                    labels: labels,
+                    type: 'line',
+                    data: data,
+                    // data: {
+                    //     datasets: datasets
+                    // },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            yAxis: {
+                                min: 0,
+                                max: 100,
+                                title: {
+                                    display: true,
+                                    text: "Soil moisture in %",
+                                }
+                            }
+
+                        },
+                        animation: {
+                            onComplete: () => {
+                                delayed = true;
+                            },
+                            delay: (context) => {
+                                let delay = 0;
+                                if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                                    delay = context.dataIndex * 100 + context.datasetIndex * 100;
+                                }
+                                return delay;
+                            },
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    usePointStyle: true,
+                                },
+                            }
+                        },
+                    }
+                })
+
+
+            });
+
+
+        </script>
+    </main>
+</body>
+
+</html>
