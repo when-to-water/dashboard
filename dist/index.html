@@ -36,11 +36,11 @@
                         <div class="row">
                             <div class="col">
                                 <label for="inputPilea">Pilea</label>
-                                <input type="number" class="form-control" id="inputPilea" value="40" min="0" max="100">
+                                <input type="number" class="form-control" id="inputPilea" value="50" min="0" max="100">
                             </div>
                             <div class="col">
                                 <label for="inputDrachenbaum">Drachenbaum</label>
-                                <input type="number" class="form-control" id="inputDrachenbaum" value="30" min="0"
+                                <input type="number" class="form-control" id="inputDrachenbaum" value="50" min="0"
                                     max="100">
                             </div>
                             <div class="col">
@@ -50,7 +50,7 @@
                             </div>
                         </div>
                     </form>
-                    <button type="button" class="btn btn-primary mt-3">
+                    <button type="button" class="btn btn-primary mt-3" id="refreshButton">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-arrow-down-up" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -183,122 +183,155 @@
                 return (result.reverse());
             }
 
-            $(function () {
+            function getPlantData() {
+                resultData = {};
+                const url = "https://awdoshiafdfteasrlnsp2cwwte0qphrd.lambda-url.eu-central-1.on.aws/";
+                inputDataPilea = {
+                    "Pilea": $('#inputPilea').val()
+                }
+                inputDataDrachenbaum = {
+                    "Drachenbaum": $('#inputDrachenbaum').val()
+                }
+                inputDataGoldfruchtpalme = {
+                    "Goldfruchtpalme": $('#inputGoldfruchtpalme').val()
+                }
+                $.when(
+                    $.ajax(url, {
+                        data: JSON.stringify(inputDataPilea),
+                        contentType: 'application/json',
+                        type: 'POST'
+                    }).done(function (data) {
+                        console.log(data);
+                        resultData["Pilea"] = data.Pilea;
+                    }).fail(function (data) {
+                        console.error(data);
+                    }),
+                    $.ajax(url, {
+                        data: JSON.stringify(inputDataDrachenbaum),
+                        contentType: 'application/json',
+                        type: 'POST'
+                    }).done(function (data) {
+                        console.log(data);
+                        resultData["Drachenbaum"] = data.Drachenbaum;
+                    }).fail(function (data) {
+                        console.error(data);
+                    }),
+                    $.ajax(url, {
+                        data: JSON.stringify(inputDataGoldfruchtpalme),
+                        contentType: 'application/json',
+                        type: 'POST'
+                    }).done(function (data) {
+                        console.log(data);
+                        resultData["Goldfruchtpalme"] = data.Goldfruchtpalme;
+                    }).fail(function (data) {
+                        console.error(data);
+                    }),
+                ).then(function () {
+                    let index = 1;
+                    Object.keys(resultData).forEach(key => {
+                        $(`#plant_${index}_details h3`).html(key);
 
-
-
-                // url = "https://awdoshiafdfteasrlnsp2cwwte0qphrd.lambda-url.eu-central-1.on.aws/";
-                // data = { "Pilea": 20 };
-                // $.ajax(url, {
-                //     data: JSON.stringify(data),
-                //     contentType: 'application/json',
-                //     type: 'POST'
-                // }).done(function (data) {
-                //     console.log(data);
-                // }).fail(function (data) {
-                //     console.error(data);
-                // });;
-                resultData = JSON.parse('{"Pilea": {"last_measuring": {"time": 1657040400, "value": 68.3}, "predicted_moisture": 65.17810837651099, "next_watering": 12.317696086879955, "last_week_moistures": [53.804329268292676, 53.13958333333333, 53.55625, 72.37083333333334, 71.93958333333333, 70.50208333333333, 69.3111111111111]}, "Drachenbaum": {"last_measuring": {"time": 1657036800, "value": 62.4}, "predicted_moisture": 61.84554479135728, "next_watering": 67.38412529378067, "last_week_moistures": [62.83942424242424, 62.07708333333333, 61.206250000000004, 59.387499999999996, 57.574999999999996, 56.34791666666666, 58.32647058823529]}, "Goldfruchtpalme": {"last_measuring": {"time": 1657040400, "value": 58.4}, "predicted_moisture": 56.811211671440056, "next_watering": 19.721199998940456, "last_week_moistures": [69.2325, 68.02291666666666, 66.87916666666666, 64.79583333333333, 62.50625, 60.552083333333336, 58.65833333333333]}}');
-
-                let index = 1;
-                Object.keys(resultData).forEach(key => {
-                    $(`#plant_${index}_details h3`).html(key);
-
-                    let watering = Math.round(resultData[key].next_watering);
-                    let level = "";
-                    if (watering < 0) {
-                        watering = `${Math.abs(watering)} day(s) ago`
-                        level = "danger"
-                    } else if (watering < 1) {
-                        watering = 'today'
-                        level = "warning"
-                    } else {
-                        watering = `in ${watering} day(s)`
-                        level = "success"
-                    }
-                    $(`#plant_${index}_watering`).html(`<b>Next watering:</b> ${watering}`).addClass(`list-group-item-${level}`);
-
-                    last_measurement_diff = DateTime.fromSeconds(resultData[key].last_measuring.time).toRelative({ locale: "en" })
-                    $(`#plant_${index}_last_measurement`).html(`<b>Last measured soil moisture:</b> ${resultData[key].last_measuring.value}&nbsp;% <span class="badge rounded-pill text-bg-secondary">${last_measurement_diff}</span>`);
-
-                    $(`#plant_${index}_predicted_moisture`).html(`<b>Current soil moisture:</b> ${resultData[key].predicted_moisture.toFixed(1)}&nbsp;% <span class="badge rounded-pill text-bg-primary">predicted</span>`);
-
-                    index++
-                });
-
-                // graph
-                let datasets = [];
-
-                index = 0;
-                Object.keys(resultData).forEach(key => {
-                    let data = resultData[key].last_week_moistures
-                    datasets.push(
-                        {
-                            label: key,
-                            borderColor: COLORS[index],
-                            backgroundColor: COLORS[index],
-                            fill: false,
-                            cubicInterpolationMode: 'monotone',
-                            data: data,
-                            tension: 0.1
+                        let watering = Math.round(resultData[key].next_watering);
+                        let level = "";
+                        if (watering < 0) {
+                            watering = `${Math.abs(watering)} day(s) ago`
+                            level = "danger"
+                        } else if (watering < 1) {
+                            watering = 'today'
+                            level = "warning"
+                        } else {
+                            watering = `in ${watering} day(s)`
+                            level = "success"
                         }
-                    )
-                    index++
-                });
+                        $(`#plant_${index}_watering`).html(`<b>Next watering:</b> ${watering}`).addClass(`list-group-item-${level}`);
 
+                        last_measurement_diff = DateTime.fromSeconds(resultData[key].last_measuring.time).toRelative({ locale: "en" })
+                        $(`#plant_${index}_last_measurement`).html(`<b>Last measured soil moisture:</b> ${resultData[key].last_measuring.value}&nbsp;% <span class="badge rounded-pill text-bg-secondary">${last_measurement_diff}</span>`);
 
-                const labels = last7Days();
-                const data = {
-                    labels: labels,
-                    datasets: datasets
-                };
-                let delayed;
-                Chart.defaults.font.family = "'-apple-system','BlinkMacSystemFont','Segoe UI','Roboto','Helvetica Neue','Arial','sans-serif','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'";
-                Chart.defaults.font.size = 16;
-                const ctx = document.getElementById('plantChart').getContext('2d');
-                const plantChart = new Chart(ctx, {
-                    labels: labels,
-                    type: 'line',
-                    data: data,
-                    // data: {
-                    //     datasets: datasets
-                    // },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            yAxis: {
-                                min: 0,
-                                max: 100,
-                                title: {
-                                    display: true,
-                                    text: "Soil moisture in %",
-                                }
-                            },
-                        },
-                        animation: {
-                            onComplete: () => {
-                                delayed = true;
-                            },
-                            delay: (context) => {
-                                let delay = 0;
-                                if (context.type === 'data' && context.mode === 'default' && !delayed) {
-                                    delay = context.dataIndex * 100 + context.datasetIndex * 100;
-                                }
-                                return delay;
-                            },
-                        },
-                        plugins: {
-                            legend: {
-                                labels: {
-                                    usePointStyle: true,
-                                },
+                        $(`#plant_${index}_predicted_moisture`).html(`<b>Current soil moisture:</b> ${resultData[key].predicted_moisture.toFixed(1)}&nbsp;% <span class="badge rounded-pill text-bg-primary">predicted</span>`);
+
+                        index++
+                    });
+
+                    // graph
+                    let datasets = [];
+
+                    index = 0;
+                    Object.keys(resultData).forEach(key => {
+                        let data = resultData[key].last_week_moistures
+                        datasets.push(
+                            {
+                                label: key,
+                                borderColor: COLORS[index],
+                                backgroundColor: COLORS[index],
+                                fill: false,
+                                cubicInterpolationMode: 'monotone',
+                                data: data,
+                                tension: 0.1
                             }
-                        },
-                    }
-                })
+                        )
+                        index++
+                    });
 
 
+                    const labels = last7Days();
+                    const data = {
+                        labels: labels,
+                        datasets: datasets
+                    };
+                    let delayed;
+                    Chart.defaults.font.family = "'-apple-system','BlinkMacSystemFont','Segoe UI','Roboto','Helvetica Neue','Arial','sans-serif','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'";
+                    Chart.defaults.font.size = 16;
+                    const ctx = document.getElementById('plantChart').getContext('2d');
+                    const plantChart = new Chart(ctx, {
+                        labels: labels,
+                        type: 'line',
+                        data: data,
+                        // data: {
+                        //     datasets: datasets
+                        // },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                yAxis: {
+                                    min: 0,
+                                    max: 100,
+                                    title: {
+                                        display: true,
+                                        text: "Soil moisture in %",
+                                    }
+                                },
+                            },
+                            animation: {
+                                onComplete: () => {
+                                    delayed = true;
+                                },
+                                delay: (context) => {
+                                    let delay = 0;
+                                    if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                                        delay = context.dataIndex * 100 + context.datasetIndex * 100;
+                                    }
+                                    return delay;
+                                },
+                            },
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        usePointStyle: true,
+                                    },
+                                }
+                            },
+                        }
+                    })
+                });
+            }
+
+            $(function () {
+                getPlantData();
+                $('#refreshButton').click(function () {
+                    getPlantData();
+                });
             });
 
 
