@@ -136,7 +136,7 @@
                     <h2 class="display-6 fw-bold">Last week moisture</h2>
                 </div>
                 <div class="col-lg-8 mx-auto text-center">
-                    <canvas id="plantChart"></canvas>
+                    <canvas id="plantChart" height="415px"></canvas>
                 </div>
             </div>
             <div class="blockquote-footer text-end"><a href="https://www.flaticon.com/free-icons/plant" title="plant icons">Plant icons created by Freepik - Flaticon</a></div>
@@ -255,6 +255,7 @@
                     // },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         scales: {
                             yAxis: {
                                 min: 0,
