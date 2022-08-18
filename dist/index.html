@@ -307,12 +307,14 @@
                 inputDataGoldfruchtpalme = {
                     "Goldfruchtpalme": $('#inputGoldfruchtpalme').val()
                 }
+                headerData = {contentType: 'application/json',
+                        type: 'POST',
+                        timeout: 30000,
+                }
                 $.when(
                     $.ajax(url, {
                         data: JSON.stringify(inputDataPilea),
-                        contentType: 'application/json',
-                        type: 'POST',
-                        timeout: 30000,
+                        ...headerData
                     }).done(function (data) {
                         console.log(data);
                         loadState += 30;
@@ -326,9 +328,7 @@
                     }),
                     $.ajax(url, {
                         data: JSON.stringify(inputDataDrachenbaum),
-                        contentType: 'application/json',
-                        type: 'POST',
-                        timeout: 30000,
+                        ...headerData
                     }).done(function (data) {
                         console.log(data);
                         loadState += 30;
@@ -342,9 +342,7 @@
                     }),
                     $.ajax(url, {
                         data: JSON.stringify(inputDataGoldfruchtpalme),
-                        contentType: 'application/json',
-                        type: 'POST',
-                        timeout: 30000,
+                        ...headerData
                     }).done(function (data) {
                         console.log(data);
                         loadState += 30;
